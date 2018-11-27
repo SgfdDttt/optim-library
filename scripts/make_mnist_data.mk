@@ -1,4 +1,4 @@
-datadir=mnist
+datadir=data/mnist
 script=scripts/mnist2txt.py
 $(shell mkdir -p $(datadir))
 
