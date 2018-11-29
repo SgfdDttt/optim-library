@@ -8,6 +8,8 @@ Plz claim TODOs
 
 1. generic script that uses train and test data and plots loss over time (input: config file with name of algorithm, pointer to dataset, hyperparameters) *Nils*
 
+1. data streamer for multiple views *Nils*
+
 ## algorithms
 
 1. Oja’s algorithm [Oja82, AZL17] *Nils*
