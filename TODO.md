@@ -6,7 +6,7 @@ Plz claim TODOs
 
 1. Adrian's synthetic dataset *Nils*
 
-1. generic script that uses train and test data and plots loss over time *Nils*
+1. generic script that uses train and test data and plots loss over time (input: config file with name of algorithm, pointer to dataset, hyperparameters) *Nils*
 
 ## algorithms
 
