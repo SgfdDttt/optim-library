@@ -4,7 +4,7 @@ Plz claim TODOs
 
 ## general
 
-0. Adrian's synthetic dataset *Nils*
+1. Adrian's synthetic dataset *Nils*
 
 1. generic script that uses train and test data and plots loss over time
 
