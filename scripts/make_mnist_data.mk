@@ -1,3 +1,4 @@
+# inside this directory, run 'make -f make_mnist_data.mk'
 datadir=data/mnist
 script=scripts/mnist2txt.py
 $(shell mkdir -p $(datadir))
