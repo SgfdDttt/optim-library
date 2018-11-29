@@ -6,7 +6,7 @@ Plz claim TODOs
 
 1. Adrian's synthetic dataset *Nils*
 
-1. generic script that uses train and test data and plots loss over time
+1. generic script that uses train and test data and plots loss over time *Nils*
 
 ## algorithms
 
@@ -27,5 +27,7 @@ Plz claim TODOs
 ## general
 
 1. data streaming code *Nils*
+
+1. MNIST dataset in .txt format *Nils*
 
 ## algorithms
