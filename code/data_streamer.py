@@ -10,6 +10,6 @@ class Streamer:
         self.stream=open(self.filename,'r')
         line=self.stream.readline()
         while line != '':
-            point=[int(x) for x in line[:-1].split(',')]
+            point=np.stream([float(x) for x in line[:-1].split(',')])
             yield point
             line=self.stream.readline()
