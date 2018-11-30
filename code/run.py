@@ -3,7 +3,7 @@ import os
 import numpy as np
 import pickle as pkl
 import Algorithms
-from data_streamer import Streamer
+from data_streamer import Streamer, MultiStreamer
 
 """ BEGIN UTIL FUNCTIONS """
 def interpret(val):
