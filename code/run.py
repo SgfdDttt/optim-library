@@ -5,10 +5,9 @@ import pickle as pkl
 import Algorithms
 from data_streamer import Streamer
 
-# TODO import all the algorithms we wrote
-
 """ BEGIN UTIL FUNCTIONS """
 def interpret(val):
+    print(val)
     try:
         return int(val)
     except ValueError:
@@ -24,7 +23,7 @@ def parse_config(config_file_name):
         key=content.split('=')[0].strip(' ')
         assert key not in config, "repeated settings in config"
         value=content.split('=')[1].strip(' ')
-        config[key]=value
+        config[key]=interpret(value)
     return config
 """ END UTIL FUNCTIONS """
 
