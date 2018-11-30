@@ -1,7 +1,7 @@
 """ Oja's algorithm as described in ... ADD REFERENCE """
 import numpy as np
 
-def Oja:
+class Oja:
     def __init__(self,hyperparameters):
         self.hyperparameters=hyperparameters
         assert 'd' in hyperparameters, 'dimensionality of input vectors not specified'
