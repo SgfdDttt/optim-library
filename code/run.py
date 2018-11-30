@@ -4,6 +4,8 @@ import numpy as np
 from pickle import pkl
 from data_streamer import Streamer
 
+# TODO import all the algorithms we wrote
+
 """ BEGIN UTIL FUNCTIONS """
 def interpret(val):
     try:
