@@ -35,7 +35,9 @@ if len(config['data'].split(','))>1:
 else:
     stream = Streamer(config['data']).get_stream()
 # pass full config as hyperparameters
+print('instantiate algorithm ' + config['algorithm'] + '...')
 algorithm=getattr(Algorithms,config['algorithm'])(config)
+print('stream data...')
 for point in stream:
     algorithm.step(point)
 if not config['savefile'].endswith('.pkl'):
