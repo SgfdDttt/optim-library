@@ -8,11 +8,7 @@ Plz claim TODOs
 
 1. generic script that uses train and test data and plots loss over time (input: config file with name of algorithm, pointer to dataset, hyperparameters) *Nils*
 
-1. data streamer for multiple views *Nils*
-
 ## algorithms
-
-1. Oja’s algorithm [Oja82, AZL17] *Nils*
 
 1. Matrix Stochastic Gradient(MSG) [ACS13, MA18])
 
@@ -31,5 +27,9 @@ Plz claim TODOs
 1. data streaming code *Nils*
 
 1. MNIST dataset in .txt format *Nils*
+
+1. data streamer for multiple views *Nils*
+
+1. Oja’s algorithm [Oja82, AZL17] *Nils*
 
 ## algorithms
