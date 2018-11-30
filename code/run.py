@@ -1,5 +1,7 @@
 import sys
+import os
 import numpy as np
+from pickle import pkl
 from data_streamer import Streamer
 
 """ BEGIN UTIL FUNCTIONS """
@@ -29,20 +31,19 @@ def parse_config(config_file_name):
         config[upper_key][lower_key]=value
     return config
 """ END UTIL FUNCTIONS """
-
-args = parser.parse_args()
-assert args.n_components <= args.dimensionality
-stream = Streamer(args.data).get_stream()
-U = np.eye(args.dimensionality, args.n_components)
-mean = np.zeros(args.dimensionality)
-time = 0
+assert os.path.isfile(sys.argv[1]), \
+        'first and only argument of this script is a config file'
+config=parse_config(sys.argv[1])
+if len(config['data'].split(','))>1:
+    stream = MultiStreamer(config['data'].split(',')).get_stream()
+else:
+    stream = Streamer(config['data']).get_stream()
+# TODO call the correct algorithm
+algorithm=something(config['algorithm'])
 for point in stream:
-    time += 1
-    learning_rate = 1./math.sqrt(time)
-    point=np.array(point,dtype=np.float32)
-    mean = ((time - 1.0)*mean + point)/time # update running average
-    point -= mean # center point
-    V = U + learning_rate * np.matmul(np.outer(point,point),U)
-    U, _ = np.linalg.qr(V,mode='reduced')
-print('saving to ' + args.savefile + '...')
-np.save(args.savefile, U)
+    algorithm.step(point)
+if not config['savefile'].endswith('.pkl'):
+    config['savefile'] += '.pkl'
+print('saving to ' + config['savefile'] + '...')
+with open(config['savefile'], 'wb') as f:
+    pkl.dump(algorithm,f)
