@@ -9,5 +9,5 @@ At the top of each class file, add the reference to a paper where that algorithm
 ## Methods
 - init: takes as input a dictionary specifying the hyperparameters of the algorithm (key values will have to be clarified in the documentation)
 - step: takes as input a data point (most likely a vector or tuple of vectors) and updates the parameters
-- transform: takes as input a data point and returns its (learned) representation
-- loss: takes as input a matrix (several data points) and returns the aggregate loss (a float) over the data points
+- transform: takes as input n data points as an (n x d) matrix, and returns their (learned) representation as an (n x k) matrix
+- loss: takes as input n data points as an (n x d) matrix and returns the aggregate loss (a float) over the data points
