@@ -1,5 +1,7 @@
 # Attributes and methods for each algorithm
 
+At the top of each class file, add the reference to a paper where that algorithm is described. The notation used for the parameters and the hyperparameters should be as close as possible to the notation used in that paper.
+
 ## Attributes
 parameters: probably a dictionary, that will hold string as keys and (mostly) numpy matrices as values
 
