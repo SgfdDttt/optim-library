@@ -1,13 +1,11 @@
 # inside this directory, run 'make -f make_mnist_data.mk'
-datadir=data/mnist
 script=scripts/mnist2txt.py
-$(shell mkdir -p $(datadir))
 
-all: $(datadir)/mnist.txt
+all: mnist.txt
 
-$(datadir)/train-images-idx3-ubyte:
+train-images-idx3-ubyte:
 	wget yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz -O $@.gz
 	gunzip $@.gz
 
-$(datadir)/mnist.txt: $(datadir)/train-images-idx3-ubyte
+mnist.txt: train-images-idx3-ubyte
 	python $(script) $< $@
