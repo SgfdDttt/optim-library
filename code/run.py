@@ -1,7 +1,8 @@
 import sys
 import os
 import numpy as np
-from pickle import pkl
+import pickle as pkl
+import Algorithms
 from data_streamer import Streamer
 
 # TODO import all the algorithms we wrote
@@ -20,30 +21,26 @@ def parse_config(config_file_name):
     prefix=''
     for line in open(config_file_name,'r'):
         content=line.strip('\n').split('#')[0].strip(' ')
-        if len(content)==0:
-            continue
-        if (content[0]=='[') and (content[-1]==']'):
-            upper_key=content[1:-1]
-            assert upper_key not in config, "repeated entry in config file"
-            config[upper_key]={}
-            continue
-        lower_key=content.split('=')[0].strip(' ')
-        assert lower_key not in config[upper_key], "repeated settings in config"
+        key=content.split('=')[0].strip(' ')
+        assert key not in config, "repeated settings in config"
         value=content.split('=')[1].strip(' ')
-        config[upper_key][lower_key]=value
+        config[key]=value
     return config
 """ END UTIL FUNCTIONS """
 
 assert os.path.isfile(sys.argv[1]), \
         'first and only argument of this script is a config file'
 config=parse_config(sys.argv[1])
+print(config)
+assert False
 if len(config['data'].split(','))>1:
     stream = MultiStreamer(config['data'].split(',')).get_stream()
 else:
     stream = Streamer(config['data']).get_stream()
 # TODO call the correct algorithm
 # pass full config as hyperparameters
-algorithm=something(config['algorithm'])(config)
+algorithm=getattr(Algorithms,config['algorithm'])(config)
+assert False
 for point in stream:
     algorithm.step(point)
 if not config['savefile'].endswith('.pkl'):
