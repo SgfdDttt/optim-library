@@ -31,16 +31,12 @@ def parse_config(config_file_name):
 assert os.path.isfile(sys.argv[1]), \
         'first and only argument of this script is a config file'
 config=parse_config(sys.argv[1])
-print(config)
-assert False
 if len(config['data'].split(','))>1:
     stream = MultiStreamer(config['data'].split(',')).get_stream()
 else:
     stream = Streamer(config['data']).get_stream()
-# TODO call the correct algorithm
 # pass full config as hyperparameters
 algorithm=getattr(Algorithms,config['algorithm'])(config)
-assert False
 for point in stream:
     algorithm.step(point)
 if not config['savefile'].endswith('.pkl'):

@@ -1,2 +1,3 @@
-# import all our algorithms
 import oja
+
+oja=oja.Oja
