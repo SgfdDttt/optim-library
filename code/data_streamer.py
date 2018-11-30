@@ -13,3 +13,17 @@ class Streamer:
             point=np.array([float(x) for x in line[:-1].split(',')])
             yield point
             line=self.stream.readline()
+
+class MultiStreamer:
+    def __init__(self,filenames):
+        self.filenames=list(filenames)
+        self.stream=None
+
+    def get_stream(self):
+        self.streams=[open(f,'r') for f in self.filenames]
+        lines=[s.readline() for s in self.streams]
+        while lines[0] != '':
+            points=[np.array([float(x) for x in line[:-1].split(',')]) \
+                    for line in lines]
+            yield tuple(points)
+            line=self.stream.readline()
