@@ -7,7 +7,6 @@ from data_streamer import Streamer
 
 """ BEGIN UTIL FUNCTIONS """
 def interpret(val):
-    print(val)
     try:
         return int(val)
     except ValueError:

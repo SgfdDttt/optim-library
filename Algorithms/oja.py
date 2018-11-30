@@ -27,7 +27,7 @@ class Oja:
         point -= self.parameters['mean']
         gradient = np.matmul(np.outer(point,point),self.parameters['U'])
         tmp = self.parameters['U'] + step_size * gradient
-        self.parameters['U'], _ = np.linalg.qr(V,mode='reduced')
+        self.parameters['U'], _ = np.linalg.qr(tmp,mode='reduced')
 
     def transform(self,points):
         return np.matmul(points,self.parameters['U'])
