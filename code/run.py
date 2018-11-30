@@ -33,6 +33,7 @@ def parse_config(config_file_name):
         config[upper_key][lower_key]=value
     return config
 """ END UTIL FUNCTIONS """
+
 assert os.path.isfile(sys.argv[1]), \
         'first and only argument of this script is a config file'
 config=parse_config(sys.argv[1])
@@ -41,7 +42,8 @@ if len(config['data'].split(','))>1:
 else:
     stream = Streamer(config['data']).get_stream()
 # TODO call the correct algorithm
-algorithm=something(config['algorithm'])
+# pass full config as hyperparameters
+algorithm=something(config['algorithm'])(config)
 for point in stream:
     algorithm.step(point)
 if not config['savefile'].endswith('.pkl'):
