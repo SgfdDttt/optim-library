@@ -1,17 +1,35 @@
-import argparse
-import math
+import sys
 import numpy as np
 from data_streamer import Streamer
 
-parser = argparse.ArgumentParser(description="Run Oja's algorithm using Numpy")
-parser.add_argument('--data', '-s', type=str,
-                    help='file to be used as data stream')
-parser.add_argument('--n_components', '-k', type=int,
-                    help='number of components of CCA decomposition')
-parser.add_argument('--dimensionality', '-d', type=int,
-                    help='dimensionality of input data')
-parser.add_argument('--savefile', type=str,
-                    help='file to save final transformation to')
+""" BEGIN UTIL FUNCTIONS """
+def interpret(val):
+    try:
+        return int(val)
+    except ValueError:
+        try:
+            return float(val)
+        except ValueError:
+            return val
+def parse_config(config_file_name):
+    config={}
+    prefix=''
+    for line in open(config_file_name,'r'):
+        content=line.strip('\n').split('#')[0].strip(' ')
+        if len(content)==0:
+            continue
+        if (content[0]=='[') and (content[-1]==']'):
+            upper_key=content[1:-1]
+            assert upper_key not in config, "repeated entry in config file"
+            config[upper_key]={}
+            continue
+        lower_key=content.split('=')[0].strip(' ')
+        assert lower_key not in config[upper_key], "repeated settings in config"
+        value=content.split('=')[1].strip(' ')
+        config[upper_key][lower_key]=value
+    return config
+""" END UTIL FUNCTIONS """
+
 args = parser.parse_args()
 assert args.n_components <= args.dimensionality
 stream = Streamer(args.data).get_stream()
