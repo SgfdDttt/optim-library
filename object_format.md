@@ -4,6 +4,7 @@ At the top of each class file, add the reference to a paper where that algorithm
 
 ## Attributes
 parameters: probably a dictionary, that will hold string as keys and (mostly) numpy matrices as values
+hyperparameters (optional): other dictionary to clearly separate the hyperparameters (passed to the alogorithms upon initialization) from the parameters (initialized from the hyperparameters and/or updated during the algorithm steps)
 
 ## Methods
 init: takes as input a dictionary specifying the hyperparameters of the algorithm (key values will have to be clarified in the documentation)
