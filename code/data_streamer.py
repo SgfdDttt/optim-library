@@ -11,5 +11,5 @@ class Streamer:
         line=self.stream.readline()
         while line != '':
             point=np.array([float(x) for x in line[:-1].split(',')])
-            yield tuple(point)
+            yield point
             line=self.stream.readline()
