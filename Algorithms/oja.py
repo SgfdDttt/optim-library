@@ -20,10 +20,10 @@ class Oja:
         self.parameters['t'] += 1
         step_size = self.hyperparameters['learning_rate']**0.5
         # update running average
+        alpha = 1.0/self.parameters['t']
         self.parameters['mean'] = \
-                (self.parameters['t'] - 1.0)*self.parameters['mean'] \
-                + point
-        self.parameters['mean'] /= self.parameters['t'] 
+                (1-alpha)*self.parameters['mean'] \
+                + alpha*point
         point -= self.parameters['mean']
         gradient = np.matmul(np.outer(point,point),self.parameters['U'])
         tmp = self.parameters['U'] + step_size * gradient
