@@ -25,7 +25,7 @@ class Oja:
                 (1-alpha)*self.parameters['mean'] \
                 + alpha*point
         point -= self.parameters['mean']
-        gradient = np.matmul(np.outer(point,point),self.parameters['U'])
+        gradient = np.outer(point,np.matmul(point.T,self.parameters['U']))
         tmp = self.parameters['U'] + step_size * gradient
         self.parameters['U'], _ = np.linalg.qr(tmp,mode='reduced')
 
