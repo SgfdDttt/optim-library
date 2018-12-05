@@ -18,7 +18,8 @@ class Oja:
 
     def step(self,point):
         self.parameters['t'] += 1
-        step_size = self.hyperparameters['learning_rate']**0.5
+        step_size = self.hyperparameters['learning_rate']\
+                *(self.parameters['t']**(-0.5))
         # update running average
         alpha = 1.0/self.parameters['t']
         self.parameters['mean'] = \
