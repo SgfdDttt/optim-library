@@ -1,5 +1,5 @@
 # inside this directory, run 'make -f make_mnist_data.mk'
-script=scripts/mnist2csv.py
+script=mnist2csv.py
 
 all: mnist.csv
 

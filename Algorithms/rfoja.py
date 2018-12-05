@@ -1,18 +1,18 @@
-""" Oja's algorithm as described in ... ADD REFERENCE """
-import numpy as np
+import Oja
 
-class Oja:
+class RFOja(Oja):
     def __init__(self,hyperparameters):
         self.hyperparameters=hyperparameters
         assert 'd' in hyperparameters, 'dimensionality of input vectors not specified'
         assert 'k' in hyperparameters, 'dimensionality of projection not specified'
+        assert 'm' in hyperparameters, 'number of random features not specified'
         assert 'learning_rate' in hyperparameters, \
                 'initial learning rate not specified'
-        assert self.hyperparameters['d'] >= self.hyperparameters['k'], \
-                'dimensionality of projection must be smaller than that of original space'
+        assert self.hyperparameters['m'] >= self.hyperparameters['k'], \
+                'dimensionality of projection must be smaller than that of the feature space'
         self.parameters={
-                'U': np.eye(self.hyperparameters['d'], self.hyperparameters['k']),
-                'mean': np.zeros(self.hyperparameters['d']),
+                'U': np.eye(self.hyperparameters['m'], self.hyperparameters['k']),
+                'mean': np.zeros(self.hyperparameters['m']),
                 't': 0
                 }
 
