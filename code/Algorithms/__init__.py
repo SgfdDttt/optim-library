@@ -1,3 +1,5 @@
+import sys,os
+sys.path.append(os.getcwd() + '/code/Algorithms')
 # import all our algorithms
 import oja
 
