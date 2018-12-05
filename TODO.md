@@ -6,11 +6,9 @@ Plz claim TODOs
 
 1. Adrian's synthetic dataset *Nils*
 
-1. generic script that uses train and test data and plots loss over time (input: config file with name of algorithm, pointer to dataset, hyperparameters) *Nils*
-
 ## algorithms
 
-1. Matrix Stochastic Gradient(MSG) [ACS13, MA18])
+1. Matrix Stochastic Gradient(MSG) [ACS13, MA18]) *Enayat*
 
 1. Stochastic CCA. [AMM16, AZL16, GJN+16]
 
@@ -26,10 +24,12 @@ Plz claim TODOs
 
 1. data streaming code *Nils*
 
-1. MNIST dataset in .txt format *Nils*
+1. MNIST dataset in .csv format *Nils*
 
 1. data streamer for multiple views *Nils*
 
-1. Oja’s algorithm [Oja82, AZL17] *Nils*
+1. generic script that uses train and test data and plots loss over time (input: config file with name of algorithm, pointer to dataset, hyperparameters) *Nils*
 
 ## algorithms
+
+1. Oja’s algorithm [Oja82, AZL17] *Nils*
