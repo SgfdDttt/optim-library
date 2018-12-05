@@ -34,6 +34,7 @@ class Oja:
         return np.matmul(points,self.parameters['U'])
 
     def loss(self,points):
+        points = points - np.expand_dims(self.parameters['mean'],axis=0)
         utx = np.matmul(points,self.parameters['U'])
         residuals = points - np.matmul(self.parameters['U'],utx.T).T
         loss = np.sum(np.power(residuals,2))
