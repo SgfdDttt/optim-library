@@ -10,7 +10,7 @@ Plz claim TODOs
 
 1. Matrix Stochastic Gradient(MSG) [ACS13, MA18]) *Enayat*
 
-1. Stochastic CCA. [AMM16, AZL16, GJN+16]
+1. Stochastic CCA. [AMM16, AZL16, GJN+16] *Nils*
 
 1. Stochastic PLS. [AMM16]
 
