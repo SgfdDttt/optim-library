@@ -46,6 +46,15 @@ class MSG_CCA:
         Algorithm 2 in Raman Arora, Andy Cotter, and Nati Srebro. Stochastic optimization 
         of pca with capped msg. In Advances in Neural Information Processing Systems,
         pages 1815–1823, 2013."""
+        U,S,VT = np.linalg.svd(mat)
+        sigma=S.tolist()[::-1] # we want the eigenvalues to be in ascending order
+        assert sorted(sigma)==sigma
+        kappa={} # multiplicities
+        for s in sigma:
+            kappa.setdefault(s,0)
+            kappa[s]+=1
+        sigma=sorted(list(set(sigma))) # remove duplicates
+        # TODO implement Alg 3
 
 
     def transform(self,points):
