@@ -38,6 +38,16 @@ class MSG_CCA:
         self.parameters['M_bar'] = (1-alpha)*self.parameters['M_bar'] \
                 + alpha*self.parameters['M']
 
+    def projection(self,mat):
+        """ projection of a matrix onto the feasible set
+        the projection proj has the same singular vectors of mat, and its singular values are
+        sigma(proj)_i = max(0, min(1, sigma(mat)_i + S)) where S is chosen such that
+        \sum_i sigma(proj)_i = k
+        Algorithm 2 in Raman Arora, Andy Cotter, and Nati Srebro. Stochastic optimization 
+        of pca with capped msg. In Advances in Neural Information Processing Systems,
+        pages 1815–1823, 2013."""
+
+
     def transform(self,points):
         return np.matmul(points,self.parameters['U'])
 
