@@ -4,7 +4,6 @@ Plz claim TODOs
 
 ## general
 
-1. Adrian's synthetic dataset *Nils*
 
 ## algorithms
 
@@ -21,6 +20,8 @@ Plz claim TODOs
 # DONE
 
 ## general
+
+1. Adrian's synthetic dataset *Nils*
 
 1. data streaming code *Nils*
 
