@@ -8,8 +8,9 @@ def make_data():
     ### 1) Two concentric circles
     ### 2) Two parabolas with different intercept and quadratic coefficient
     ### 3) Two concentric circles with classes reversed and greater variance
-    N = 1000000 # Number of examples
-    F1 = 2 # Number of features in view 1
+    #N = 1000000 # Number of examples
+    N = 1000 # Number of examples
+    F1 = 3 # Number of features in view 1
     F2 = 2
     F3 = 2
     k = 2 # Number of latent features
@@ -23,10 +24,12 @@ def make_data():
 
     # Each class lies on a different concentric circle
     rand_angle = np.random.uniform(0.0, 2.0 * math.pi, (N, 1) )
-    rand_noise = 0.1 * np.random.randn(N, k)
-    circle_pos = np.hstack( [np.cos(rand_angle), np.sin(rand_angle)])
+    rand_noise = 0.1 * np.random.randn(N, F1)
+    circle_pos = np.hstack( [np.cos(rand_angle), np.sin(rand_angle),
+        np.zeros_like(rand_angle)] )
     radius = G.dot(np.asarray( [[1.0], [2.0]] )).reshape( (N, 1) )
-    V1 = np.hstack([radius, radius]) * circle_pos + rand_noise
+    V1 = np.hstack([radius, radius, np.zeros_like(radius)])
+    V1 = V1 * circle_pos + rand_noise
 
     # Each class lies on a different parabola
     rand_x = np.random.uniform(-3.0, 3.0, (N, 1) )
