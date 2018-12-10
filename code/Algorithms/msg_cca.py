@@ -38,22 +38,13 @@ class MSG_CCA:
         self.parameters['M_bar'] = (1-alpha)*self.parameters['M_bar'] \
                 + alpha*self.parameters['M']
 
-    def projection(self,mat):
-        """ projection of a matrix onto the feasible set
-        the projection proj has the same singular vectors of mat, and its singular values are
+    def find_S(self,sigma,kappa):
+        """ finding S such that
         sigma(proj)_i = max(0, min(1, sigma(mat)_i + S)) where S is chosen such that
         \sum_i sigma(proj)_i = k
         Algorithm 2 in Raman Arora, Andy Cotter, and Nati Srebro. Stochastic optimization 
         of pca with capped msg. In Advances in Neural Information Processing Systems,
         pages 1815–1823, 2013."""
-        U,S,VT = np.linalg.svd(mat)
-        sigma=S.tolist()[::-1] # we want the eigenvalues to be in ascending order
-        assert sorted(sigma)==sigma
-        kappa={} # multiplicities
-        for s in sigma:
-            kappa.setdefault(s,0)
-            kappa[s]+=1
-        sigma=sorted(list(set(sigma))) # remove duplicates
         # in the original paper, indexing is 1-based, hence the -1 to switch to
         # Python's 0-based indexing
         ii,jj,si,sj,ci,cj=1,1,0,0,0,0
@@ -78,9 +69,28 @@ class MSG_CCA:
             #end if ((j<=n) and (sigma[jj-1] - sigma[ii-1] <= 1))
         # end while (i <= n)
 
+    def projection(self,mat):
+        """ projection of a matrix onto the feasible set
+        the projection proj has the same singular vectors of mat, and its singular values are
+        sigma(proj)_i = max(0, min(1, sigma(mat)_i + S)) where S is chosen such that
+        \sum_i sigma(proj)_i = k
+        Algorithm 2 in Raman Arora, Andy Cotter, and Nati Srebro. Stochastic optimization 
+        of pca with capped msg. In Advances in Neural Information Processing Systems,
+        pages 1815–1823, 2013."""
+        U,S,VT = np.linalg.svd(mat)
+        sigma=sorted(S.tolist()) # we want the eigenvalues to be in ascending order
+        kappa={} # multiplicities
+        for s in sigma:
+            kappa.setdefault(s,0)
+            kappa[s]+=1
+        sigma=sorted(list(set(sigma))) # remove duplicates
+        s=self.find_S(sigma,kappa)
+        new_S=np.max(0, np.min(1, S+s))
+        return np.matmul(np.matmul(U,new_S),VT)
 
     def transform(self,points):
-        return np.matmul(points,self.parameters['U'])
+        x,y=points
+        return np.matmul(x,self.parameters['U'])
 
     def loss(self,points):
         points = points - np.expand_dims(self.parameters['mean'],axis=0)
