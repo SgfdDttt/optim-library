@@ -70,6 +70,7 @@ class MSG_CCA:
                 ii += 1
             #end if ((jj<=n) and (sigma[jj-1] - sigma[ii-1] <= 1))
         # end while ( ii <= n )
+        assert False, "error occurred"
 
     def projection(self,mat):
         """ projection of a matrix onto the feasible set
