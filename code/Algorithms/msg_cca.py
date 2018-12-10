@@ -90,11 +90,9 @@ class MSG_CCA:
 
     def transform(self,points):
         x,y=points
-        return np.matmul(x,self.parameters['U'])
+        assert False, "not implemented"
 
     def loss(self,points):
-        points = points - np.expand_dims(self.parameters['mean'],axis=0)
-        utx = np.matmul(points,self.parameters['U'])
-        residuals = points - np.matmul(self.parameters['U'],utx.T).T
-        loss = np.sum(np.power(residuals,2))
+        x,y=points
+        loss=np.trace(np.matmul(np.matmul(x,self.parameters["M_bar"]),y.T))
         return loss
