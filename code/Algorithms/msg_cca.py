@@ -1,5 +1,5 @@
 """ Matrix Stochastic Gradient method for Canonical Correlation Analysis as described in 
-Raman Arora, Poorya Mianjy, and Teodor Marinov. Stochastic optimization for multiview representation learning using partial least squares. In International Conference on Machine Learning, pages 1786–1794, 2016."""
+Raman Arora, Poorya Mianjy, and Teodor Marinov. Stochastic optimization for multiview representation learning using partial least squares, 2016."""
 
 import numpy as np
 
@@ -16,10 +16,11 @@ class MSG_CCA:
         assert self.hyperparameters['dy'] >= self.hyperparameters['k'], \
                 'dimensionality of projection must be smaller than that of original space'
         self.parameters={
-                'M': np.zeros(self.hyperparameters['dx'], self.hyperparameters['dy']),
-                'M_bar': np.zeros(self.hyperparameters['dx'], self.hyperparameters['dy']),
+                'M': np.zeros((self.hyperparameters['dx'], self.hyperparameters['dy'])),
+                'M_bar': np.zeros((self.hyperparameters['dx'], self.hyperparameters['dy'])),
                 'mean_x': np.zeros(self.hyperparameters['dx']),
                 'mean_y': np.zeros(self.hyperparameters['dy']),
+                'd': min(self.hyperparameters['dx'], self.hyperparameters['dy']),
                 't': 0
                 }
 
@@ -44,22 +45,22 @@ class MSG_CCA:
         sigma(proj)_i = max(0, min(1, sigma(mat)_i + S)) where S is chosen such that
         \sum_i sigma(proj)_i = k
         Algorithm 2 in Raman Arora, Andy Cotter, and Nati Srebro. Stochastic optimization 
-        of pca with capped msg. In Advances in Neural Information Processing Systems,
-        pages 1815–1823, 2013."""
+        of pca with capped msg, 2013."""
         # in the original paper, indexing is 1-based, hence the -1 to switch to
         # Python's 0-based indexing
         ii,jj,si,sj,ci,cj=1,1,0,0,0,0
         n=len(sigma)
-        while (i <= n):
-            if (i<j):
-                S=(k - (sj-si) - (d-cj))/(cj-ci)
+        while (ii <= n):
+            if ( ii < jj ):
+                S=( self.hyperparameters['k'] - (sj-si) - (self.parameters['d']-cj) )\
+                        /(cj-ci)
                 b=[sigma[ii-1]+S >= 0, sigma[jj-2]+S <= 1,
-                        (ii<=1) or sigma[ii-2]+S <=0, (j>=n) or (sigma[jj]>=1)]
+                        (ii<=1) or sigma[ii-2]+S <=0, (jj>=n) or (sigma[jj]>=1)]
                 b=all(b)
                 if b:
                     return S
-            #end if (i<j)
-            if ((j<=n) and (sigma[jj-1] - sigma[ii-1] <= 1)):
+            #end if ( ii<jj )
+            if ((jj<=n) and (sigma[jj-1] - sigma[ii-1] <= 1)):
                 sj += kappa[sigma[jj-1]]*sigma[jj-1]
                 cj += kappa[sigma[jj-1]]
                 jj += 1
@@ -67,17 +68,14 @@ class MSG_CCA:
                 si += kappa[sigma[ii-1]]*sigma[ii-1]
                 ci += kappa[sigma[ii-1]]
                 ii += 1
-            #end if ((j<=n) and (sigma[jj-1] - sigma[ii-1] <= 1))
-        # end while (i <= n)
+            #end if ((jj<=n) and (sigma[jj-1] - sigma[ii-1] <= 1))
+        # end while ( ii <= n )
 
     def projection(self,mat):
         """ projection of a matrix onto the feasible set
         the projection proj has the same singular vectors of mat, and its singular values are
         sigma(proj)_i = max(0, min(1, sigma(mat)_i + S)) where S is chosen such that
-        \sum_i sigma(proj)_i = k
-        Algorithm 2 in Raman Arora, Andy Cotter, and Nati Srebro. Stochastic optimization 
-        of pca with capped msg. In Advances in Neural Information Processing Systems,
-        pages 1815–1823, 2013."""
+        \sum_i sigma(proj)_i = k """
         U,S,VT = np.linalg.svd(mat)
         sigma=sorted(S.tolist()) # we want the eigenvalues to be in ascending order
         kappa={} # multiplicities
@@ -86,7 +84,7 @@ class MSG_CCA:
             kappa[s]+=1
         sigma=sorted(list(set(sigma))) # remove duplicates
         s=self.find_S(sigma,kappa)
-        new_S=np.max(0, np.min(1, S+s))
+        new_S=np.diag([max(0, min(1, sig+s)) for sig in S])
         return np.matmul(np.matmul(U,new_S),VT)
 
     def transform(self,points):
