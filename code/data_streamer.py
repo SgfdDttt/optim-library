@@ -26,4 +26,4 @@ class MultiStreamer:
             points=[np.array([float(x) for x in line[:-1].split(',')]) \
                     for line in lines]
             yield tuple(points)
-            line=self.stream.readline()
+            lines=[s.readline() for s in self.streams]
