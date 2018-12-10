@@ -54,7 +54,29 @@ class MSG_CCA:
             kappa.setdefault(s,0)
             kappa[s]+=1
         sigma=sorted(list(set(sigma))) # remove duplicates
-        # TODO implement Alg 3
+        # in the original paper, indexing is 1-based, hence the -1 to switch to
+        # Python's 0-based indexing
+        ii,jj,si,sj,ci,cj=1,1,0,0,0,0
+        n=len(sigma)
+        while (i <= n):
+            if (i<j):
+                S=(k - (sj-si) - (d-cj))/(cj-ci)
+                b=[sigma[ii-1]+S >= 0, sigma[jj-2]+S <= 1,
+                        (ii<=1) or sigma[ii-2]+S <=0, (j>=n) or (sigma[jj]>=1)]
+                b=all(b)
+                if b:
+                    return S
+            #end if (i<j)
+            if ((j<=n) and (sigma[jj-1] - sigma[ii-1] <= 1)):
+                sj += kappa[sigma[jj-1]]*sigma[jj-1]
+                cj += kappa[sigma[jj-1]]
+                jj += 1
+            else:
+                si += kappa[sigma[ii-1]]*sigma[ii-1]
+                ci += kappa[sigma[ii-1]]
+                ii += 1
+            #end if ((j<=n) and (sigma[jj-1] - sigma[ii-1] <= 1))
+        # end while (i <= n)
 
 
     def transform(self,points):
