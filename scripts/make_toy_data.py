@@ -9,7 +9,7 @@ def make_data():
     ### 2) Two parabolas with different intercept and quadratic coefficient
     ### 3) Two concentric circles with classes reversed and greater variance
     #N = 1000000 # Number of examples
-    N = 1000 # Number of examples
+    N = int(1e3) # Number of examples
     F1 = 3 # Number of features in view 1
     F2 = 2
     F3 = 2
