@@ -2,7 +2,6 @@
 import numpy as np
 import sys
 import math
-import torch
 
 def make_data():
     ### Generate sample data with 3 views and two classes:
