@@ -37,6 +37,7 @@ class MSG_CCA:
         self.parameters['M'] = self.projection(tmp)
         self.parameters['M_bar'] = (1-alpha)*self.parameters['M_bar'] \
                 + alpha*self.parameters['M']
+        # TODO missing the rounding operation
 
     def find_S(self,sigma,kappa):
         """ finding S such that
