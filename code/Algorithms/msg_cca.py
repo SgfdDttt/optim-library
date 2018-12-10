@@ -84,7 +84,9 @@ class MSG_CCA:
             kappa[s]+=1
         sigma=sorted(list(set(sigma))) # remove duplicates
         s=self.find_S(sigma,kappa)
-        new_S=np.diag([max(0, min(1, sig+s)) for sig in S])
+        new_sigma=np.diag([max(0, min(1, sig+s)) for sig in S])
+        new_S=np.zeros((U.shape[0],VT.shape[0]))
+        np.fill_diagonal(new_S, new_sigma) # modify S in place
         return np.matmul(np.matmul(U,new_S),VT)
 
     def transform(self,points):
