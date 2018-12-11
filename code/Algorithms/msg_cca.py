@@ -38,7 +38,7 @@ class MSG_CCA:
         self.parameters['M'] = self.projection(tmp)
         self.parameters['M_bar'] = (1-alpha)*self.parameters['M_bar'] \
                 + alpha*self.parameters['M']
-        # TODO missing the rounding operation
+        # self.rounding() not necessary to do this at every time step
 
     def find_S(self,sigma,kappa):
         """ finding S such that
@@ -87,14 +87,25 @@ class MSG_CCA:
         s=self.find_S(sigma,kappa)
         new_sigma=np.diag([max(0, min(1, sig+s)) for sig in S])
         new_S=np.zeros((U.shape[0],VT.shape[0]))
-        np.fill_diagonal(new_S, new_sigma) # modify S in place
+        np.fill_diagonal(new_S, new_sigma) # modify new_S in place
         return np.matmul(np.matmul(U,new_S),VT)
+
+    def rounding(self):
+        """ implement rounding operation mentioned in Algorithm 1, line 6 """
+        U,S,VT=np.linalg.svd(self.parameters['M_bar'])
+        assert (sorted(S)==S[::-1]).all() # make sure it's sorted in descending order
+        S=[s if ii<=self.hyperparameters['k'] else 0. for ii,s in enumerate(S)]
+        diag_S=np.zeros((U.shape[0],VT.shape[0]))
+        np.fill_diagonal(diag_S, S) # modify diag_S in place
+        self.parameters['M_tilde']=np.matmul(np.matmul(U,diag_S),VT)
 
     def transform(self,points):
         x,y=points
+        self.rounding() # update M_tilde
         assert False, "not implemented"
 
     def loss(self,points):
         x,y=points
-        loss=np.trace(np.matmul(np.matmul(x,self.parameters["M_bar"]),y.T))
+        self.rounding() # update M_tilde
+        loss=np.trace(np.matmul(np.matmul(x,self.parameters['M_tilde']),y.T))
         return loss
