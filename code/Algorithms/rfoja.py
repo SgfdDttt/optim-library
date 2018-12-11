@@ -16,7 +16,7 @@ class RFOja(Oja,object):
                 }
 
     def step(self,point):
-        rf_point = list(self.randomFeature(point,'rbf'))
+        rf_point = np.array(self.randomFeature(point,'rbf'))
         super(RFOja, self).step(rf_point)
         print super(RFOja, self).loss(rf_point)
 
