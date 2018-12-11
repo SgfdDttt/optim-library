@@ -3,8 +3,8 @@ Bach and Jordan, A Probabilistic Interpretation of Canonical Correlation Analysi
 import numpy as np
 
 # dimensionality of X, dimensionality of Y, dimensionality of latent variable
-dx,dy,k=11,14,5
-num_samples=int(1e6)
+dx,dy,k=110,214,56
+num_samples=int(1e4)
 
 # means
 mu_x=np.random.uniform(low=0.0, high=1.0, size=(dx,1))
@@ -32,5 +32,8 @@ for ii in range(num_samples):
     # sample Y
     mean_y=np.matmul(W_y,Z[ii:ii+1,:].T)+mu_y
     Y.append(np.random.multivariate_normal(np.squeeze(mean_y),Psi_y))
-    assert False
 # print out
+X=np.stack(X,axis=0)
+Y=np.stack(Y,axis=0)
+np.savetxt('synth_data_bach_jordan_view1.csv',X,delimiter=',')
+np.savetxt('synth_data_bach_jordan_view2.csv',Y,delimiter=',')
