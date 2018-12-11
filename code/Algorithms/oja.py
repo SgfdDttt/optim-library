@@ -1,4 +1,5 @@
-""" Oja's algorithm as described in ... ADD REFERENCE """
+""" Oja's algorithm as described in
+Zeyuan Allen-Zhu and Yuanzhi Li. First efficient convergence for streaming k-pca: a global, gap-free, and near-optimal rate, 2017."""
 import numpy as np
 
 class Oja:
