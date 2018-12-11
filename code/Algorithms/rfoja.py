@@ -1,39 +1,42 @@
-import Oja
+from oja import Oja
+import numpy as np
 
-class RFOja(Oja):
+class RFOja(Oja,object):
     def __init__(self,hyperparameters):
+        super(RFOja, self).__init__(hyperparameters)
         self.hyperparameters=hyperparameters
-        assert 'd' in hyperparameters, 'dimensionality of input vectors not specified'
-        assert 'k' in hyperparameters, 'dimensionality of projection not specified'
         assert 'm' in hyperparameters, 'number of random features not specified'
-        assert 'learning_rate' in hyperparameters, \
-                'initial learning rate not specified'
         assert self.hyperparameters['m'] >= self.hyperparameters['k'], \
                 'dimensionality of projection must be smaller than that of the feature space'
         self.parameters={
                 'U': np.eye(self.hyperparameters['m'], self.hyperparameters['k']),
                 'mean': np.zeros(self.hyperparameters['m']),
-                't': 0
+                't': 0,
+                'rfSamples': self.randomFeatureSamples('rbf')
                 }
 
     def step(self,point):
-        self.parameters['t'] += 1
-        step_size = self.hyperparameters['learning_rate']**0.5
-        # update running average
-        alpha = 1.0/self.parameters['t']
-        self.parameters['mean'] = \
-                (1-alpha)*self.parameters['mean'] \
-                + alpha*point
-        point -= self.parameters['mean']
-        gradient = np.matmul(np.outer(point,point),self.parameters['U'])
-        tmp = self.parameters['U'] + step_size * gradient
-        self.parameters['U'], _ = np.linalg.qr(tmp,mode='reduced')
+        rf_point = list(self.randomFeature(point,'rbf'))
+        super(RFOja, self).step(rf_point)
+        print super(RFOja, self).loss(rf_point)
 
-    def transform(self,points):
-        return np.matmul(points,self.parameters['U'])
 
-    def loss(self,points):
-        uut = np.matmul(self.parameters['U'],self.parameters['U'].T)
-        residuals = points - np.matmul(points,uut)
-        loss = np.sum(np.power(residuals,2))
-        return loss
+    def randomFeatureSamples(self,kernel):
+        if kernel =='rbf':
+            mean = np.zeros(self.hyperparameters['d'])
+            cov = np.eye(self.hyperparameters['d'])
+            W = np.random.multivariate_normal(mean, cov, self.hyperparameters['m'])
+            B = np.random.uniform(0,1,self.hyperparameters['m'])
+            return W,B
+
+    def randomFeature(self,point,kernel):
+        if kernel == 'rbf':
+            W,B = self.parameters['rfSamples']
+            const= np.sqrt(2)/np.sqrt(self.hyperparameters['m'])
+            rf_point = [const*np.cos(np.dot(point,w)+b) for (w,b) in zip(W,B)]
+            return rf_point
+
+
+
+
+
