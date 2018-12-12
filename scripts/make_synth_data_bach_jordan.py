@@ -4,7 +4,7 @@ import numpy as np
 
 # dimensionality of X, dimensionality of Y, dimensionality of latent variable
 dx,dy,k=110,214,56
-num_samples=int(1e4)
+num_samples=int(1e6)
 
 # means
 mu_x=np.random.uniform(low=0.0, high=1.0, size=(dx,1))
@@ -26,6 +26,8 @@ Z=np.random.normal(size=(num_samples,k))
 # sample both views
 X,Y=[],[]
 for ii in range(num_samples):
+    if ii%(num_samples/100)==0:
+        print(str(round(float(ii)/num_samples*100)) + '%')
     # sample X
     mean_x=np.matmul(W_x,Z[ii:ii+1,:].T)+mu_x
     X.append(np.random.multivariate_normal(np.squeeze(mean_x),Psi_x))
