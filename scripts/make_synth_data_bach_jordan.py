@@ -3,8 +3,9 @@ Bach and Jordan, A Probabilistic Interpretation of Canonical Correlation Analysi
 import numpy as np
 
 # dimensionality of X, dimensionality of Y, dimensionality of latent variable
-dx,dy,k=110,214,56
-num_samples=int(1e6)
+#dx,dy,k=110,214,56
+dx,dy,k=11,21,5
+num_samples=int(1e4)
 
 # means
 mu_x=np.random.uniform(low=0.0, high=1.0, size=(dx,1))
@@ -15,27 +16,18 @@ W_x=np.random.uniform(low=-10.0, high=10.0, size=(dx,k))
 W_y=np.random.uniform(low=-5.0, high=8.0, size=(dy,k))
 
 # covariances
-Psi_x=np.random.uniform(low=-10.0, high=10.0, size=(dx,dx))
-Psi_x=np.matmul(Psi_x,Psi_x.T) # so it's semi-def pos
-Psi_y=np.random.uniform(low=-10.0, high=10.0, size=(dy,dy))
-Psi_y=np.matmul(Psi_y,Psi_y.T) # so it's semi-def pos
+Psi_x_sqrt=np.random.uniform(low=-10.0, high=10.0, size=(dx,dx))
+Psi_y_sqrt=np.random.uniform(low=-25.0, high=5.0, size=(dy,dy))
 
 # sample latent variable
-Z=np.random.normal(size=(num_samples,k))
+Z=np.random.normal(size=(k,num_samples))
+# sample X
+H_x=np.random.normal(size=(dx,num_samples))
+X=mu_x + np.matmul(W_x,Z) + np.matmul(Psi_x_sqrt,H_x)
+# sample Y
+H_y=np.random.normal(size=(dy,num_samples))
+Y=mu_y + np.matmul(W_y,Z) + np.matmul(Psi_y_sqrt,H_y)
 
-# sample both views
-X,Y=[],[]
-for ii in range(num_samples):
-    if ii%(num_samples/100)==0:
-        print(str(round(float(ii)/num_samples*100)) + '%')
-    # sample X
-    mean_x=np.matmul(W_x,Z[ii:ii+1,:].T)+mu_x
-    X.append(np.random.multivariate_normal(np.squeeze(mean_x),Psi_x))
-    # sample Y
-    mean_y=np.matmul(W_y,Z[ii:ii+1,:].T)+mu_y
-    Y.append(np.random.multivariate_normal(np.squeeze(mean_y),Psi_y))
 # print out
-X=np.stack(X,axis=0)
-Y=np.stack(Y,axis=0)
-np.savetxt('synth_data_bach_jordan_view1.csv',X,delimiter=',')
-np.savetxt('synth_data_bach_jordan_view2.csv',Y,delimiter=',')
+np.savetxt('synth_data_bach_jordan_view1.csv',X.T,delimiter=',')
+np.savetxt('synth_data_bach_jordan_view2.csv',Y.T,delimiter=',')
