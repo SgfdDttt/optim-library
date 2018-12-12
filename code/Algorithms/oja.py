@@ -44,6 +44,6 @@ class Oja:
     def loss(self,points):
         points = points - self.hyperparameters['mean_center']*np.expand_dims(self.parameters['mean'],axis=0)
         utx = np.matmul(points,self.parameters['U'])
-        residuals = points - np.matmul(self.parameters['U'],utx.T).T
-        loss = np.sum(np.power(residuals,2))
+        residuals = points - np.matmul(utx,self.parameters['U'].T)
+        loss = np.linalg.norm(residuals)**2
         return loss
