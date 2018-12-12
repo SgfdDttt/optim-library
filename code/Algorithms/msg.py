@@ -16,22 +16,26 @@ class MSG:
                 't': 0
                 }
 
-    def step(self,point):
+    def step(self,point,IF_PROJECT=1):
         self.parameters['t'] += 1
         step_size = self.hyperparameters['learning_rate']**0.5
         # update running average
         self.parameters['mean'] = \
                 (self.parameters['t'] - 1.0)*self.parameters['mean'] \
                 + point
-        self.parameters['mean'] /= self.parameters['t'] 
+        alpha = 1.0/self.parameters['t']
+        self.parameters['mean'] = \
+            (1-alpha)*self.parameters['mean'] \
+            + alpha*point
         point -= self.parameters['mean']
         gradient = np.outer(point,point)
         tmp = self.parameters['P'] + step_size * gradient
-        [eigenValues,eigenVectors]= self.projection_fast(tmp)
-        # self.parameters['P'] = self.projection(tmp)
-  
-        self.parameters['P'] = self.rounding(eigenValues,eigenVectors)
-        print self.loss(point)
+        if IF_PROJECT:
+            [eigenValues,eigenVectors]= self.projection_fast(tmp)
+            self.parameters['P'] = self.rounding(eigenValues,eigenVectors)
+        else:
+            self.parameters['P'] = tmp
+        # print self.loss(point)
 
     def transform(self,points):
         return np.matmul(self.parameters['P'], points)
@@ -177,7 +181,6 @@ class MSG:
     def rounding(self,eigenValues,eigenVectors):
         d = self.hyperparameters['d']
         k = self.hyperparameters['k']
-        # projectedP = np.zeros([d,d])
 
         projectedP = np.matmul(eigenVectors[:,d-k-1:d],np.matmul(np.diag(eigenValues[d-k-1:d]),eigenVectors[:,d-k-1:d].T))
         # for q in range(d-1,d-k-1,-1):

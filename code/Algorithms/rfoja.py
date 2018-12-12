@@ -12,31 +12,26 @@ class RFOja(Oja,object):
                 'U': np.eye(self.hyperparameters['m'], self.hyperparameters['k']),
                 'mean': np.zeros(self.hyperparameters['m']),
                 't': 0,
-                'rfSamples': self.randomFeatureSamples('rbf')
+                'rfSamples': self.randomFeatureSamples(hyperparameters['kernel'])
                 }
 
     def step(self,point):
-        rf_point = np.array(self.randomFeature(point,'rbf'))
+        rf_point = np.array(self.randomFeature(point))
         super(RFOja, self).step(rf_point)
         print super(RFOja, self).loss(rf_point)
 
 
     def randomFeatureSamples(self,kernel):
-        if kernel =='rbf':
+        if self.hyperparameters['kernel'] =='rbf':
             mean = np.zeros(self.hyperparameters['d'])
-            cov = np.eye(self.hyperparameters['d'])
+            cov = self.hyperparameters['kernel_hyperparameter']*np.eye(self.hyperparameters['d'])
             W = np.random.multivariate_normal(mean, cov, self.hyperparameters['m'])
-            B = np.random.uniform(0,1,self.hyperparameters['m'])
+            B = np.random.uniform(0,2*np.pi,self.hyperparameters['m'])
             return W,B
 
-    def randomFeature(self,point,kernel):
-        if kernel == 'rbf':
+    def randomFeature(self,point):
+        if self.hyperparameters['kernel'] == 'rbf':
             W,B = self.parameters['rfSamples']
             const= np.sqrt(2)/np.sqrt(self.hyperparameters['m'])
             rf_point = [const*np.cos(np.dot(point,w)+b) for (w,b) in zip(W,B)]
             return rf_point
-
-
-
-
-
