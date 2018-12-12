@@ -8,7 +8,6 @@ class l2MSG(MSG,object):
         assert 'lambda' in hyperparameters, 'regularization parameter not specified'
 
     def step(self,point):
-
         super(l2MSG, self).step(point,IF_PROJECT=0)
         tmp = self.parameters['P'] - self.hyperparameters['lambda']*self.hyperparameters['learning_rate']*self.parameters['P']
         [eigenValues,eigenVectors]= self.projection_fast(tmp)
