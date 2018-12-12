@@ -11,6 +11,9 @@ class Oja:
                 'initial learning rate not specified'
         assert self.hyperparameters['d'] >= self.hyperparameters['k'], \
                 'dimensionality of projection must be smaller than that of original space'
+        self.hyperparameters.setdefault('mean_center',1.0)
+        assert self.hyperparameters['mean_center'] in [0.0, 1.0], \
+                "either mean center or don't"
         self.parameters={
                 'U': np.eye(self.hyperparameters['d'], self.hyperparameters['k']),
                 'mean': np.zeros(self.hyperparameters['d']),
@@ -26,7 +29,7 @@ class Oja:
         self.parameters['mean'] = \
                 (1-alpha)*self.parameters['mean'] \
                 + alpha*point
-        point -= self.parameters['mean']
+        point -= self.hyperparameters['mean_center']*self.parameters['mean']
         gradient = np.outer(point,np.matmul(point.T,self.parameters['U']))
         tmp = self.parameters['U'] + step_size * gradient
         self.parameters['U'], _ = np.linalg.qr(tmp,mode='reduced')
