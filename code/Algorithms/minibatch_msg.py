@@ -1,24 +1,22 @@
-from oja import Oja
+from msg import MSG
 import numpy as np
 
-class RFOja(Oja,object):
+class minibatchMSG(MSG,object):
     def __init__(self,hyperparameters):
-        super(RFOja, self).__init__(hyperparameters)
+        super(minibatchMSG, self).__init__(hyperparameters)
         self.hyperparameters=hyperparameters
-        assert 'm' in hyperparameters, 'number of random features not specified'
-        assert self.hyperparameters['m'] >= self.hyperparameters['k'], \
-                'dimensionality of projection must be smaller than that of the feature space'
-        self.parameters={
-                'U': np.eye(self.hyperparameters['m'], self.hyperparameters['k']),
-                'mean': np.zeros(self.hyperparameters['m']),
-                't': 0,
-                'rfSamples': self.randomFeatureSamples(hyperparameters['kernel'])
-                }
+        assert 'm' in hyperparameters, 'minibatch size not specified'
+        self.counter = 0
 
     def step(self,point):
-        rf_point = np.array(self.randomFeature(point))
-        super(RFOja, self).step(rf_point)
-        print super(RFOja, self).loss(rf_point)
+        self.counter+=1
+        if self.counter == self.hyperparameters['m']:
+            super(minibatchMSG, self).step(point,IF_PROJECT=1)
+            self.counter=0
+        else:
+            super(minibatchMSG, self).step(point,IF_PROJECT=0)
+
+        print super(minibatchMSG, self).loss(point)
 
 
     def randomFeatureSamples(self,kernel):
@@ -35,8 +33,3 @@ class RFOja(Oja,object):
             const= np.sqrt(2)/np.sqrt(self.hyperparameters['m'])
             rf_point = [const*np.cos(np.dot(point,w)+b) for (w,b) in zip(W,B)]
             return rf_point
-
-
-
-
-
