@@ -32,7 +32,7 @@ class MSG:
             self.parameters['P'] = self.rounding(eigenValues,eigenVectors)
         else:
             self.parameters['P'] = tmp
-        print self.loss(point)
+        # print self.loss(point)
 
     def transform(self,points):
         return np.matmul(self.parameters['P'], points)

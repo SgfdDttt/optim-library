@@ -4,6 +4,7 @@ sys.path.append(os.getcwd() + '/code/Algorithms')
 import oja
 import msg_cca
 import minibatch_msg
+import l2_msg
 
 # left side of equal sign is the name that will be used to describe it in a config file
 # right side of the equal sign is name_of_file.name_of_class
@@ -17,6 +18,7 @@ import rfoja
 rfoja = rfoja.RFOja
 
 minibatch_msg = minibatch_msg.minibatchMSG
+l2_msg = l2_msg.l2MSG
 
 msg_cca=msg_cca.MSG_CCA
 
