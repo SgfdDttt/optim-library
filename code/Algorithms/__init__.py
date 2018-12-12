@@ -12,8 +12,8 @@ import msg_cca
 oja=oja.Oja
 
 
-import msg
-msg = msg.MSG
+#import msg
+#msg = msg.MSG
 
 #import rfoja
 #rfoja = rfoja.RFOja
