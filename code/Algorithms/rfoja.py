@@ -35,8 +35,3 @@ class RFOja(Oja,object):
             const= np.sqrt(2)/np.sqrt(self.hyperparameters['m'])
             rf_point = [const*np.cos(np.dot(point,w)+b) for (w,b) in zip(W,B)]
             return rf_point
-
-
-
-
-

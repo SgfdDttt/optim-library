@@ -23,7 +23,10 @@ class MSG:
         self.parameters['mean'] = \
                 (self.parameters['t'] - 1.0)*self.parameters['mean'] \
                 + point
-        self.parameters['mean'] /= self.parameters['t'] 
+        alpha = 1.0/self.parameters['t']
+        self.parameters['mean'] = \
+            (1-alpha)*self.parameters['mean'] \
+            + alpha*point
         point -= self.parameters['mean']
         gradient = np.outer(point,point)
         tmp = self.parameters['P'] + step_size * gradient
