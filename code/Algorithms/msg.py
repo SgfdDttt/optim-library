@@ -11,39 +11,43 @@ class MSG:
         assert self.hyperparameters['d'] >= self.hyperparameters['k'], \
                 'dimensionality of projection must be smaller than that of original space'
         self.parameters={
-                'P': np.eye(self.hyperparameters['d'], self.hyperparameters['d']),
+                'P': np.random.uniform(low=-1., high=1., \
+                        size=(self.hyperparameters['d'], self.hyperparameters['d']) ),
                 'mean': np.zeros(self.hyperparameters['d']),
                 't': 0
                 }
 
     def step(self,point,IF_PROJECT=1):
         self.parameters['t'] += 1
-        step_size = self.hyperparameters['learning_rate']**0.5
+        step_size = self.hyperparameters['learning_rate']\
+                /(self.parameters['t']**0.5)
         # update running average
-        self.parameters['mean'] = \
-                (self.parameters['t'] - 1.0)*self.parameters['mean'] \
-                + point
-        alpha = 1.0/self.parameters['t']
-        self.parameters['mean'] = \
-            (1-alpha)*self.parameters['mean'] \
-            + alpha*point
-        point -= self.parameters['mean']
+        # self.parameters['mean'] = \
+        #         (self.parameters['t'] - 1.0)*self.parameters['mean'] \
+        #         + point
+        # alpha = 1.0/self.parameters['t']
+        # self.parameters['mean'] = \
+            # (1-alpha)*self.parameters['mean'] \
+            # + alpha*point
+        # point -= self.parameters['mean']
         gradient = np.outer(point,point)
         tmp = self.parameters['P'] + step_size * gradient
         if IF_PROJECT:
-            [eigenValues,eigenVectors]= self.projection_slow(tmp)
-            self.parameters['P'] = self.rounding(eigenValues,eigenVectors)
+            # eigenValues,eigenVectors = self.projection_slow(tmp)
+            # self.parameters['P'] = self.rounding(eigenValues,eigenVectors)
+            self.parameters['P'] = self.projection_slow(tmp)
         else:
             self.parameters['P'] = tmp
-        print self.loss(point)
+        # print self.loss(point)
 
     def transform(self,points):
         return np.matmul(self.parameters['P'], points)
 
     def loss(self,points):
-        points = points - self.parameters['mean']
-        residuals = points - np.matmul(self.parameters['P'], points)
-        loss = np.sum(np.power(residuals,2))
+        # print np.shape(points)
+        # print np.shape(self.parameters['P'])
+        residuals = points - np.matmul(points,self.parameters['P'])
+        loss =  np.linalg.norm(residuals)**2
         return loss
 
     def projection_slow(self,P):
@@ -69,7 +73,8 @@ class MSG:
                 eigenValues_copy[i]=1
 
         if sum(eigenValues_copy) <=k:
-            return [eigenValues_copy,eigenVectors]
+            projectedP = np.matmul(eigenVectors[:,d-k-1:d],np.matmul(np.diag(eigenValues_copy[d-k-1:d]),eigenVectors[:,d-k-1:d].T))
+            return projectedP 
 
         # trace was bigger than k after capping ==> shf <= 0
         # rule: SS(i:j) should not be capped and everything outside that range
@@ -87,7 +92,7 @@ class MSG:
                    eigenValues_copy[j+1:l]=1
                    # eigenValues_copy = eigenValues_copy[:j+1]+[1 for q in range(j+1,l)]
                 # print i,j
-                shf = 0 if (j-i+1) == 0 else (k-sum(eigenValues_copy))/(j-i+1)  
+                shf = (k-sum(eigenValues_copy))/(j-i+1)  
                 eigenValues_copy[i:j+1]+=shf
                 # eigenValues_copy = list(eigenValues_copy)
                 # print [(eigenValues_copy[q]+shf) for q in range(i,j+1)]
@@ -97,7 +102,9 @@ class MSG:
 
                 if (eigenValues_copy[i]>=0  and (i==0 or eigenValues[i-1]+shf<=0)  and eigenValues_copy[j]<=1  and (j==l-1 or eigenValues[j+1]+shf>=1)):
                     # print eigenValues_copy
-                    return [eigenValues_copy,eigenVectors]
+                    # return eigenValues_copy,eigenVectors
+                    projectedP = np.matmul(eigenVectors[:,d-k-1:d],np.matmul(np.diag(eigenValues_copy[d-k-1:d]),eigenVectors[:,d-k-1:d].T))
+                    return projectedP 
 
     def projection_fast(self,P):
 

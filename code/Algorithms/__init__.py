@@ -15,8 +15,8 @@ oja=oja.Oja
 import msg
 msg = msg.MSG
 
-#import rfoja
-#rfoja = rfoja.RFOja
+import rfoja
+rfoja = rfoja.RFOja
 
 #minibatch_msg = minibatch_msg.minibatchMSG
 #l2_msg = l2_msg.l2MSG
