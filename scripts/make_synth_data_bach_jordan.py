@@ -5,7 +5,7 @@ import numpy as np
 # dimensionality of X, dimensionality of Y, dimensionality of latent variable
 #dx,dy,k=110,214,56
 dx,dy,k=11,21,5
-num_samples=int(1e4)
+num_samples=2**20 #int(1e5)
 
 # means
 mu_x=np.random.uniform(low=0.0, high=1.0, size=(dx,1))
@@ -28,6 +28,20 @@ X=mu_x + np.matmul(W_x,Z) + np.matmul(Psi_x_sqrt,H_x)
 H_y=np.random.normal(size=(dy,num_samples))
 Y=mu_y + np.matmul(W_y,Z) + np.matmul(Psi_y_sqrt,H_y)
 
+# mean-center and variance-normalize to simplify the job of the downstream
+# algorithm
+mean_x=np.mean(X,axis=1,keepdims=True)
+mean_y=np.mean(Y,axis=1,keepdims=True)
+cov_x=np.sqrt(\
+        np.mean(np.power(X,2),axis=1,keepdims=True) - np.power(mean_x,2) )
+cov_y=np.sqrt(\
+        np.mean(np.power(Y,2),axis=1,keepdims=True) - np.power(mean_y,2) )
+X = np.divide( X - mean_x, cov_x)
+Y = np.divide( Y - mean_y, cov_y)
+
 # print out
-np.savetxt('synth_data_bach_jordan_view1.csv',X.T,delimiter=',')
-np.savetxt('synth_data_bach_jordan_view2.csv',Y.T,delimiter=',')
+test_ind=int(X.shape[1]*0.01) # take the top 1% of the data as test data, the rest as train
+np.savetxt('data/synth_data_bach_jordan_test_view1.csv',X[:,:test_ind].T,delimiter=',')
+np.savetxt('data/synth_data_bach_jordan_train_view1.csv',X[:,test_ind:].T,delimiter=',')
+np.savetxt('data/synth_data_bach_jordan_test_view2.csv',Y[:,:test_ind].T,delimiter=',')
+np.savetxt('data/synth_data_bach_jordan_train_view2.csv',Y[:,test_ind:].T,delimiter=',')
