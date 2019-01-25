@@ -2,7 +2,7 @@ import sys,os
 sys.path.append(os.getcwd() + '/code/Algorithms')
 # import all our algorithms
 import oja
-import msg_cca
+import msg_pls
 import minibatch_msg
 import l2_msg
 import rfmsg_cca
@@ -21,6 +21,6 @@ rfoja = rfoja.RFOja
 minibatch_msg = minibatch_msg.minibatchMSG
 l2_msg = l2_msg.l2MSG
 
-msg_cca=msg_cca.MSG_CCA
+msg_pls=msg_pls.MSG_PLS
 rfmsg_cca = rfmsg_cca.RFMSG_CCA
 

@@ -3,7 +3,7 @@ Raman Arora, Poorya Mianjy, and Teodor Marinov. Stochastic optimization for mult
 
 import numpy as np
 
-class MSG_CCA:
+class MSG_PLS:
     def __init__(self,hyperparameters):
         self.hyperparameters=hyperparameters
         assert 'dx' in hyperparameters, 'dimensionality of first view not specified'
