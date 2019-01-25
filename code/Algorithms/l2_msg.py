@@ -13,4 +13,4 @@ class l2MSG(MSG,object):
         tmp = self.parameters['P'] - self.hyperparameters['lambda']*self.hyperparameters['learning_rate']*self.parameters['P']
         [eigenValues,eigenVectors]= self.projection_fast(tmp)
         self.parameters['P'] = self.rounding(eigenValues,eigenVectors)
-        print self.loss(point)
+        print(self.loss(point))

@@ -1,7 +1,7 @@
-from msg_cca import MSG_CCA
+from msg_pls import MSG_PLS
 import numpy as np
 
-class RFMSG_CCA(MSG_CCA,object):
+class RFMSG_CCA(MSG_PLS,object):
     def __init__(self,hyperparameters):
         super(RFMSG_CCA, self).__init__(hyperparameters)
         self.hyperparameters=hyperparameters
@@ -27,7 +27,7 @@ class RFMSG_CCA(MSG_CCA,object):
         rf_x = np.array(self.randomFeature(x,VIEW='x'))
         rf_y = np.array(self.randomFeature(y,VIEW='y'))
         super(RFMSG_CCA, self).step([rf_x,rf_y])
-        print super(RFMSG_CCA, self).loss([rf_x,rf_y])
+        print(super(RFMSG_CCA, self).loss([rf_x,rf_y]))
 
 
     def randomFeatureSamples(self,kernel,VIEW):
