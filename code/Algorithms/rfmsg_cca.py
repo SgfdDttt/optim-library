@@ -56,10 +56,3 @@ class RFMSG_CCA(MSG_PLS,object):
             const= np.sqrt(2)/np.sqrt(m)
             rf_point = [const*np.cos(np.dot(point,w)+b) for (w,b) in zip(W,B)]
             return rf_point
-
-
-
-
-
-
-
